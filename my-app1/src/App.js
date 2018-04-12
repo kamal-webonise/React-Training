@@ -1,16 +1,20 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Test from './Test'
+import PropTypes from 'prop-types'
 
 class App extends Component {
   render() {
+  	let obj= { name: "Enter your Name", add: 'Add', list: 'List' };
     return (
       <div>
-        <span>Name </span>
-        <span>Kamal Singh</span> 
+        <Test {...obj}/>
       </div>  
     );
   }
 }
 
+App.propTypes = {
+	index: PropTypes.number
+};
 export default App;
