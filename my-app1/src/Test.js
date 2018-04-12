@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Display from './Display'
 
 class Test extends Component {
 
@@ -16,8 +17,9 @@ class Test extends Component {
 	handleClick() {
 		let temp=[];
 		let val= this.text.current.value;
+		console.log(typeof val)
 		if(val!= '') {
-			let arrayele= this.state.arr;
+			let arrayele= [...this.state.arr];
 			temp= arrayele.map((ele)=>ele);
 			temp.push(val);
 			this.setState({arr: temp, text: ''});
@@ -35,9 +37,7 @@ class Test extends Component {
 	      <input type="text" ref= {this.text} value= {this.state.text} onChange= {this.handleChange}/>
 	      <button onClick={this.handleClick}>{this.props.add} # {tempArr.length}</button>
         <h3>{this.props.list}</h3>
-        <ul>
-        	{ tempArr.map((val)=><li>{val}</li>) }
-        </ul> 
+        <Display arr= {tempArr} />
       </div> 
     );
   }
