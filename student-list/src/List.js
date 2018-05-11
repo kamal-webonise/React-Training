@@ -1,87 +1,83 @@
 import React, { Component } from 'react';
+import InputBox from './InputBox.js';
+import CheckBox from './CheckBox.js';
+import Display from './Display.js';
 
 class List extends Component {
 
 	constructor(props) {
 		super(props);
-		this.text = React.createRef();
-		this.handleClick = this.handleClick.bind(this);
-		this.handleChange = this.handleChange.bind(this);
 		this.state = {
-			val: '' ,
 			data: {
 			  results: [
-			    {"firstName": "Sanket", "lastName":"Gadade","marks":{"english":70, "hindi":60,"mathematics":46}},
-			    {"firstName": "Shubham", "lastName":"Laad","marks":{"english":40, "hindi":55,"mathematics":46}},
-			    {"firstName": "Swapnil", "lastName":"Patil","marks":{"english":50, "hindi":60,"mathematics":77}},
-			    {"firstName": "Ankita", "lastName":"Pawar","marks":{"english":50, "hindi":55,"mathematics":46}},
-			    {"firstName": "Vijayraj", "lastName":"Nathe","marks":{"english":35, "hindi":45,"mathematics":11}}
+			    {"firstName": "sanket", "lastName":"Gadade","marks":{"english":70, "hindi":60,"mathematics":46}},
+			    {"firstName": "shubham", "lastName":"Laad","marks":{"english":40, "hindi":55,"mathematics":46}},
+			    {"firstName": "swapnil", "lastName":"Patil","marks":{"english":50, "hindi":60,"mathematics":77}},
+			    {"firstName": "ankita", "lastName":"Pawar","marks":{"english":50, "hindi":55,"mathematics":46}},
+			    {"firstName": "vijayraj", "lastName":"Nathe","marks":{"english":35, "hindi":45,"mathematics":11}},
+			    {"firstName": "sanket", "lastName":"Gadade","marks":{"english":70, "hindi":60,"mathematics":46}}
 			  ]
 			}
 		}
+		this.changeArray = this.changeArray.bind(this);
+		this.changeCheck = this.changeCheck.bind(this);
 	}
 
-	handleChange(e) {
-		this.setState({val : e.target.value});
-	}
+	changeArray(name) {
+		let flag = 0;
+		let temp = [...this.state.data.results];
+		let tempObj = []; 
+		
 
-	handleClick(e) {
-		return null;
-	}
+		temp.map((obj) => {
+			if(obj.firstName === name || obj.lastName === name) {
+				flag=1;
+				tempObj.push(obj);
+			}
+		});
+
+		if (flag == 1) {
+			let newData = { results: tempObj };
+			this.setState({
+				data: newData
+			})
+		}	
+	} 
+
+	changeCheck(e) {
+		// let id = e.target.id;
+		// let status = e.target.checked;
+		// debugger;
+		let tempData = [...this.state.data.results];
+		let status = [];
+		let grade = [65,60,55,33];
+
+		for(let i = 0; i < 4; i++) {
+			let ele = document.getElementById(i+1);
+			status[i] = ele.checked;
+		}
+		
+		for(let i = 3; i >= 0 ; i-- ) {
+			if(!status[i]) {
+				tempData.map((obj)=> {
+					if(obj.percentage < grade[i]){
+						tempData.pop(obj);
+					}
+				});
+			}
+			console.log(i);
+			tempData.map((obj) => {
+				console.log(obj);
+			});
+		}
+	}	
 
 	render() {
-		let rows = [];
-		let result = this.state.data.results;
-
-		for( let i = 0; i < result.length; i++) {
-			let rowId = `row${i}`
-			let cell = []
-			for ( var j = 0; j < 2;j++) {
-				var cellId = `cell{i}-${j}`
-				cell.push(<td key={cellId} id={cellId}>{result[i].firstName}</td>)
-			}
-			rows.push(<tr key={i} id={rowId}>{cell}</tr>)
-		}
-
-			
-
 		return(
 			<div>
-				<input type="text" placeHolder = "Search Box" ref= {this.text} value={this.state.val} onChange={this.handleChange} />
-				<button onClick = {this.handleClick}> Search </button>
-
-				<ul>
-					<li>
-						<input type = "checkbox" /> 
-						<span>Distinction </span>
-					</li>
-					<li>	
-						<input type = "checkbox"/>
-						<span> First Class </span>
-					</li>
-					<li>	
-						<input type = "checkbox"/>
-						<span> Second Class </span>
-					</li>
-					<li>	
-						<input type = "checkbox"/>
-						<span> Fail </span>
-					</li>
-				</ul>
-
-				<table id='simple-board'>
-					<thread>
-						<tr>
-							<th>FirstName</th>
-							<th>LastName</th>
-							<th>Percentage</th>
-						</tr>
-					</thread>
-					<tbody>
-						{rows}
-					</tbody>
-				</table>
-
+				<InputBox changeArray = { this.changeArray } />
+				<CheckBox changeCheck = { this.changeCheck}/>
+				<Display data= {this.state.data} />
 			</div>
 		);
 	}
